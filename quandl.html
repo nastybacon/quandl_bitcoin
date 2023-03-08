@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        const API_KEY = '7BYyTr9wEV8eU91Yss6w' // API Key
+
+        async function loadCourse() {
+            let today = new Date(); // variable -> alle Informationen über aktuellen Datum 
+            today.setDate(new Date().getDate() - 1); // von diesem Element ziehen wir 1 Tag ab (gestern)
+            let startDate = today.toString().split('T')[0]; // gestern
+            let endDate = today.toString().split('T')[0]; // heute
+            let url = `https://data.nasdaq.com/api/v3/datasets/BITFINEX/LUNAF0USTF0?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`;
+            let response = await fetch(url); // Informationen aus der URL
+            let responseAsJson = await response.json(); // Informationen in JSON
+            // console.log('API answers:', bitcoinToday);
+            showBitcoinToday(responseAsJson); // nächste Funktion aufrufen
+        }
+
+        function showBitcoinToday(responseAsJson) {
+            let bitcoinToday = responseAsJson['dataset']['data'][0][3]; // den Text aus dem passendem Array holen
+            document.getElementById('bitcoinUSD').innerHTML = bitcoinToday; // den aktuellen Kurs anzeigen
+        }
+    </script>
+</head>
+
+<body onload="loadCourse()">
+
+    <h1>Was kostet ein Bitcoin aktuell?</h1>
+
+    <div>Aktuell kostet ein Bitcoin <b id="bitcoinUSD">60.000 USD</b></div> <!-- was auch immer für eine Währung das ist -->
+</body>
+
+</html>
